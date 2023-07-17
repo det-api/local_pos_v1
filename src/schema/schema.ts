@@ -161,9 +161,9 @@ export const detailSaleUpdateSchema = object({
 
 export const fuelInSchema = object({
   body: object({
-    stationId: string({
-      required_error: "you need stationId",
-    }).regex(/^[0-9a-fA-F]{24}$/, "invlid id"),
+    // stationId: string({
+    //   required_error: "you need stationId",
+    // }).regex(/^[0-9a-fA-F]{24}$/, "invlid id"),
 
     driver: string({
       required_error: "you need add driver",

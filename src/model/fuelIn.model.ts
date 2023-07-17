@@ -34,6 +34,21 @@ const fuelInSchema = new Schema({
 });
 
 fuelInSchema.pre("save", function (next) {
+  // if (this.receive_date) {
+  //   next();
+  //   return;
+  // }
+  // this.receive_date = currentDate;
+  // next();
+  const options = { timeZone: "Asia/Yangon", hour12: false };
+
+  const currentDate = moment().tz("Asia/Yangon").format("YYYY-MM-DD");
+  const currentDateTime = new Date().toLocaleTimeString("en-US", options);
+
+  let iso: Date = new Date(`${currentDate}T${currentDateTime}.000Z`);
+
+  this.createAt = iso;
+
   if (this.receive_date) {
     next();
     return;

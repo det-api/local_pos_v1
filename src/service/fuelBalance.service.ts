@@ -7,6 +7,7 @@ import config from "config";
 export const getFuelBalance = async (
   query: FilterQuery<fuelBalanceDocument>
 ) => {
+  console.log(query);
   try {
     return await fuelBalanceModel
       .find(query)

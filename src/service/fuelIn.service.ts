@@ -5,7 +5,6 @@ import config from "config";
 
 const limitNo = config.get<number>("page_limit");
 
-
 export const getFuelIn = async (query: FilterQuery<fuelInDocument>) => {
   try {
     return await fuelInModel
@@ -49,12 +48,15 @@ export const addFuelIn = async (body: any) => {
       createAt: body.receive_date,
     });
 
+    console.log(tankCondition);
+
     const updatedBody = {
       ...body,
       stationId: body.user[0].stationId,
       fuel_in_code: no + 1,
       tank_balance: tankCondition[0].balance,
     };
+
     let result = await new fuelInModel(updatedBody).save();
     await updateFuelBalance(
       { _id: tankCondition[0]._id },
@@ -90,17 +92,15 @@ export const deleteFuelIn = async (query: FilterQuery<fuelInDocument>) => {
   }
 };
 
-
 export const fuelInByDate = async (
   query: FilterQuery<fuelInDocument>,
   d1: Date,
   d2: Date,
   pageNo: number
-): Promise<{count : number , data : fuelInDocument[]}> => {
-
+): Promise<{ count: number; data: fuelInDocument[] }> => {
   const reqPage = pageNo == 1 ? 0 : pageNo - 1;
   const skipCount = limitNo * reqPage;
-  
+
   const filter: FilterQuery<fuelInDocument> = {
     ...query,
     createAt: {
@@ -118,5 +118,5 @@ export const fuelInByDate = async (
     .select("-__v");
 
   const count = await fuelInModel.countDocuments(filter);
-  return {data , count}
+  return { data, count };
 };
