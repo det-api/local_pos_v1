@@ -18,6 +18,7 @@ import { liveDataChangeHandler } from "./connection/liveTimeData";
 import { detailSaleUpdateByDevice } from "./service/detailSale.service";
 import dailyPriceRoute from "./router/dailyPrice.routes";
 import dbConnect, { client, connect } from "./utils/connect";
+import blinkLed from "./connection/ledBlink";
 
 const app = express();
 app.use(fileUpload());
@@ -50,17 +51,24 @@ client.on("connect", connect);
 client.on("message", async (topic, message) => {
   let data = topic.split("/");
 
-  if (data[2] == "Final") {
-    detailSaleUpdateByDevice(data[3], message.toString());
-  }
+  // console.log(data[1]);
 
-  if (data[2] == "livedata") {
-    liveDataChangeHandler(message.toString());
+  if (data[1] == "device") {
+    console.log(data[3]);
+    blinkLed(Number(data[3]));
   }
+  // console.log(data);
+  // if (data[2] == "Final") {
+  //   detailSaleUpdateByDevice(data[3], message.toString());
+  // }
 
-  if (topic == "detpos/local_server") {
-    console.log(topic, message.toString());
-  }
+  // if (data[2] == "livedata") {
+  //   liveDataChangeHandler(message.toString());
+  // }
+
+  // if (topic == "detpos/local_server/price") {
+  //   console.log(topic, message.toString());
+  // }
 });
 
 // socket

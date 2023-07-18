@@ -7,11 +7,7 @@ const limitNo = config.get<number>("page_limit");
 
 export const getFuelIn = async (query: FilterQuery<fuelInDocument>) => {
   try {
-    return await fuelInModel
-      .find(query)
-      .lean()
-      .populate("stationId")
-      .select("-__v");
+    return await fuelInModel.find(query).lean().select("-__v");
   } catch (e) {
     throw new Error(e);
   }
@@ -30,7 +26,6 @@ export const fuelInPaginate = async (
     .skip(skipCount)
     .limit(limitNo)
     .lean()
-    .populate("stationId")
     .select("-__v");
 
   const count = await fuelInModel.countDocuments(query);
@@ -114,7 +109,6 @@ export const fuelInByDate = async (
     .sort({ createAt: -1 })
     .skip(skipCount)
     .limit(limitNo)
-    .populate("stationId")
     .select("-__v");
 
   const count = await fuelInModel.countDocuments(filter);
