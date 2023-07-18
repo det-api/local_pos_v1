@@ -54,6 +54,9 @@ export const addDetailSale = async (
     const count = await detailSaleModel.countDocuments({
       dailyReportDate: currentDate,
     });
+
+    console.log(currentDate);
+
     body = {
       ...body,
       vocono: `${body.user[0].stationNo}/${
@@ -63,7 +66,9 @@ export const addDetailSale = async (
       casherCode: body.user[0].name,
       asyncAlready: "0",
     };
+
     console.log("wk1");
+
     const lastDocument = await detailSaleModel
       .findOne({ nozzleNo: body.nozzleNo })
       .sort({ _id: -1, createAt: -1 });

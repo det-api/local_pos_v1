@@ -49,7 +49,6 @@ client.on("connect", connect);
 
 client.on("message", async (topic, message) => {
   let data = topic.split("/");
-  // console.log(data);
 
   if (data[2] == "Final") {
     detailSaleUpdateByDevice(data[3], message.toString());

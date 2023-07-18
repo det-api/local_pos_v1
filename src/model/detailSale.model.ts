@@ -68,16 +68,13 @@ detailSaleSchema.pre("save", function (next) {
   const options = { timeZone: "Asia/Yangon", hour12: false };
 
   const currentDate = moment().tz("Asia/Yangon").format("YYYY-MM-DD");
+
   const currentDateTime = new Date().toLocaleTimeString("en-US", options);
 
   let iso: Date = new Date(`${currentDate}T${currentDateTime}.000Z`);
 
   this.createAt = iso;
 
-  if (this.dailyReportDate) {
-    next();
-    return;
-  }
   this.dailyReportDate = currentDate;
   next();
 });

@@ -48,11 +48,6 @@ fuelInSchema.pre("save", function (next) {
   let iso: Date = new Date(`${currentDate}T${currentDateTime}.000Z`);
 
   this.createAt = iso;
-
-  if (this.receive_date) {
-    next();
-    return;
-  }
   this.receive_date = currentDate;
   next();
 });

@@ -45,10 +45,6 @@ debtSchema.pre("save", function (next) {
   const currentDateTime = new Date().toLocaleTimeString("en-US", options);
   let iso: Date = new Date(`${currentDate}T${currentDateTime}.000Z`);
   this.createdAt = iso;
-  if (this.dateOfDay) {
-    next();
-    return;
-  }
   this.dateOfDay = currentDate;
   next();
 });

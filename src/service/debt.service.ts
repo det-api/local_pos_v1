@@ -5,7 +5,11 @@ import { getCoustomerById, updateCoustomer } from "./coustomer.service";
 
 export const getDebt = async (query: FilterQuery<debtDocument>) => {
   try {
-    return await debtModel.find(query).lean().select("-__v");
+    return await debtModel
+      .find(query)
+      .populate("coustomer")
+      .lean()
+      .select("-__v");
   } catch (e) {
     throw new Error(e);
   }
@@ -20,6 +24,7 @@ export const DebtPaginate = async (
   const skipCount = limitNo * reqPage;
   const data = await debtModel
     .find(query)
+    .populate("coustomer")
     .skip(skipCount)
     .limit(limitNo)
     .lean()

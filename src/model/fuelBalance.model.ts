@@ -29,17 +29,13 @@ const fuelBalanceSchema = new Schema({
   cash: { type: Number, default: 0 },
   balance: { type: Number, default: 0 },
   nozzles: { type: Array, required: true },
-  realTime: { type: Date , default: new Date()},
-  createAt: { type: String, default: new Date().toLocaleDateString(`fr-CA`)  },
+  realTime: { type: Date, default: new Date() },
+  createAt: { type: String, default: new Date().toLocaleDateString(`fr-CA`) },
 });
 
 fuelBalanceSchema.pre("save", function (next) {
   const currentDate = moment().tz("Asia/Yangon").format("YYYY-MM-DD");
 
-  if (this.realTime) {
-    next();
-    return;
-  }
   this.realTime = new Date();
   this.createAt = currentDate;
   next();
