@@ -5,6 +5,7 @@ import {
   addDebt,
   countDebt,
   deleteDebt,
+  detailSaleByDateAndPagi,
   updateDebt,
 } from "../service/debt.service";
 import {
@@ -80,6 +81,43 @@ export const deleteDebtHandler = async (
   try {
     await deleteDebt(req.query);
     fMsg(res, "Debt data was deleted");
+  } catch (e) {
+    next(new Error(e));
+  }
+};
+
+export const getDebtDatePagiHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    let sDate: any = req.query.sDate;
+    let eDate: any = req.query.eDate;
+    let pageNo: number = Number(req.params.page);
+
+    delete req.query.sDate;
+    delete req.query.eDate;
+
+    let query = req.query;
+
+    if (!sDate) {
+      throw new Error("you need date");
+    }
+    if (!eDate) {
+      eDate = new Date();
+    }
+    //if date error ? you should use split with T or be sure detail Id
+    const startDate: Date = new Date(sDate);
+    const endDate: Date = new Date(eDate);
+    let { data, count } = await detailSaleByDateAndPagi(
+      query,
+      startDate,
+      endDate,
+      pageNo
+    );
+
+    fMsg(res, "debt between two date", data, count);
   } catch (e) {
     next(new Error(e));
   }

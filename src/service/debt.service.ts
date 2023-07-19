@@ -75,3 +75,42 @@ export const deleteDebt = async (query: FilterQuery<debtDocument>) => {
     throw new Error(e);
   }
 };
+
+export const detailSaleByDateAndPagi = async (
+  query: FilterQuery<debtDocument>,
+  d1: Date,
+  d2: Date,
+  pageNo: number
+): Promise<{ count: number; data: debtDocument[] }> => {
+  try {
+    const limitNo = config.get<number>("page_limit");
+
+    const reqPage = pageNo == 1 ? 0 : pageNo - 1;
+    const skipCount = limitNo * reqPage;
+    // console.log(reqPage , skipCount)
+    const filter: FilterQuery<debtDocument> = {
+      ...query,
+      createAt: {
+        $gt: d1,
+        $lt: d2,
+      },
+    };
+
+    const dataQuery = debtModel
+      .find(filter)
+      .sort({ createAt: -1 })
+      .skip(skipCount)
+      .limit(limitNo)
+      // .populate("stationDetailId")
+      .select("-__v");
+
+    const countQuery = debtModel.countDocuments(filter);
+
+    const [data, count] = await Promise.all([dataQuery, countQuery]);
+
+    return { data, count };
+  } catch (error) {
+    console.error("Error in detailSaleByDateAndPagi:", error);
+    throw error;
+  }
+};

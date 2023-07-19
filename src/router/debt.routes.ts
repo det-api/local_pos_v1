@@ -1,6 +1,7 @@
 import {
   addDebtHandler,
   deleteDebtHandler,
+  getDebtDatePagiHandler,
   getDebtHandler,
   updateDebtHandler,
 } from "../controller/debt.controller";
@@ -8,6 +9,13 @@ import {
 const debtRoute = require("express").Router();
 
 debtRoute.get("/:page", getDebtHandler);
+
+debtRoute.get(
+  "/pagi/by-date/:page",
+  // validateToken,
+  // hasAnyPermit(["view"]),
+  getDebtDatePagiHandler
+);
 
 debtRoute.post("/", addDebtHandler);
 

@@ -1,29 +1,19 @@
 let Gpio = require("onoff").Gpio;
-// import * from 'onoff'
 
-let gpioAndDevice = {
-  "1": 17,
-  "2": 18,
-  "3": 27,
-  "4": 22,
-  "5": 23,
-  "6": 24,
-  "7": 5,
-  "8": 6,
-};
+let arr = [0, 17, 18, 27, 22, 23, 24, 5, 6];
 
-let arr = [17, 18, 27, 22, 23, 24, 5, 6];
+const blinkLed = async (ledNo: number) => {
+  try {
+    let LED = new Gpio(arr[ledNo], "out");
 
-const blinkLed = (ledNo: number) => {
-  //   let LED = new Gpio(arr[ledNo], "out");
+    LED.writeSync(1);
 
-  console.log(arr[ledNo]);
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
-  //   LED.writeSync(1);
-
-  //   setTimeout(() => {
-  //     LED.writeSync(0);
-  //   }, 250);
+    LED.writeSync(0);
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 export default blinkLed;

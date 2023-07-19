@@ -3,7 +3,6 @@ import config from "config";
 import cors from "cors";
 import fileUpload from "express-fileupload";
 import userRoute from "./router/user.routes";
-import mqtt from "mqtt";
 import permitRoute from "./router/permit.routes";
 import roleRoute from "./router/role.routes";
 import detailSaleRoute from "./router/detailSale.routes";
@@ -26,49 +25,29 @@ app.use(cors({ origin: "*" }));
 
 const server = require("http").createServer(app);
 
-// export const client = mqtt.connect("ws://192.168.0.100:9001", {
-//   username: "detpos",
-//   password: "asdffdsa",
-// });
-
-// export const pub_topic = "detpos/local_server/";
-// export const sub_topic = "detpos/device/";
-
-// const connect = () => {
-//   client.subscribe("#", { qos: 0 }, function (err) {
-//     if (err) {
-//       console.log("An error occurred while subscribing");
-//     } else {
-//       console.log("Subscribed successfully to " + sub_topic.toString());
-//     }
-//   });
-// };
-
-//mqtt
-
 client.on("connect", connect);
 
 client.on("message", async (topic, message) => {
   let data = topic.split("/");
 
-  // console.log(data[1]);
+  console.log(data[2]);
 
-  if (data[1] == "device") {
-    console.log(data[3]);
-    blinkLed(Number(data[3]));
+  // if (data[2] == "active") {
+  //   console.log(data[3]);
+  //   blinkLed(Number(data[3]));
+  // }
+
+  if (data[2] == "Final") {
+    detailSaleUpdateByDevice(data[3], message.toString());
   }
-  // console.log(data);
-  // if (data[2] == "Final") {
-  //   detailSaleUpdateByDevice(data[3], message.toString());
-  // }
 
-  // if (data[2] == "livedata") {
-  //   liveDataChangeHandler(message.toString());
-  // }
+  if (data[2] == "livedata") {
+    liveDataChangeHandler(message.toString());
+  }
 
-  // if (topic == "detpos/local_server/price") {
-  //   console.log(topic, message.toString());
-  // }
+  if (topic == "detpos/local_server/price") {
+    console.log(topic, message.toString());
+  }
 });
 
 // socket
